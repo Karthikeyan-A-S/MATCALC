@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MatCalc</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="logo.png">
+</head>
+<body>
+    <div class="app-container">
+        <header>
+            <h1>M A T C A L C</h1>
+        </header>
+
+        <main class="calculator-main">
+            <div class="card stored-matrices-panel">
+                <h2>Stored Matrices</h2>
+                <div id="stored-matrices-list" class="stored-matrices-list"></div>
+                <button id="newMatrixBtn" class="action-btn">Create New Matrix</button>
+            </div>
+
+            <div class="card result-panel">
+                <h2>Result</h2>
+                <div id="result-display" class="result-display">
+                    <p>Your result will appear here.</p>
+                </div>
+                 <button id="storeResultBtn" class="action-btn">Store Result</button>
+            </div>
+
+            <div class="card expression-panel">
+                <h2>Expression</h2>
+                <div id="expression-display" class="expression-display" contenteditable="true" spellcheck="false"></div>
+            </div>
+
+            <div class="keypad-panel card">
+                <div class="keypad">
+                    <button class="keypad-btn function" data-key="transpose(">Aᵀ</button>
+                    <button class="keypad-btn function" data-key="power(">Aⁿ</button>
+                    <button class="keypad-btn function" data-key="ref(">REF</button>
+                    <button class="keypad-btn function" data-key="rref(">RREF</button>
+                    <button class="keypad-btn function" data-key="inv(">inv()</button>
+                    <button class="keypad-btn function" data-key="det(">det()</button>
+                    <button class="keypad-btn" data-key="(">(</button>
+                    <button class="keypad-btn" data-key=")">)</button>
+                    <button class="keypad-btn number" data-key="7">7</button>
+                    <button class="keypad-btn number" data-key="8">8</button>
+                    <button class="keypad-btn number" data-key="9">9</button>
+                    <button class="keypad-btn operator" data-key=" + ">+</button>
+                    <button class="keypad-btn number" data-key="4">4</button>
+                    <button class="keypad-btn number" data-key="5">5</button>
+                    <button class="keypad-btn number" data-key="6">6</button>
+                    <button class="keypad-btn operator" data-key=" - ">-</button>
+                    <button class="keypad-btn number" data-key="1">1</button>
+                    <button class="keypad-btn number" data-key="2">2</button>
+                    <button class="keypad-btn number" data-key="3">3</button>
+                    <button class="keypad-btn operator" data-key=" * ">*</button>
+                    <button class="keypad-btn clear" data-key="C">C</button>
+                    <button class="keypad-btn number" data-key="0">0</button>
+                    <button class="keypad-btn operator" data-key=" . ">.</button>
+                    <button class="keypad-btn equals" data-key="=">=</button>
+                </div>
+                <div class="info-box">
+                    <p><b>Pro-tip:</b> Use `.` for element-wise ops (e.g., `A .* B`). Type functions like `rank()`, `trace()`, `identity(3)` directly.</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div id="matrixEditorModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2>Matrix Editor</h2>
+            <div class="editor-controls">
+                <input type="text" id="matrixNameInput" placeholder="Matrix Name (e.g., A)">
+                <input type="number" id="matrixRowsInput" placeholder="Rows" min="1" value="2">
+                <input type="number" id="matrixColsInput" placeholder="Cols" min="1" value="2">
+                <button id="createGridBtn">Create Grid</button>
+            </div>
+            <div id="matrixGridContainer" class="matrix-grid-editor"></div>
+            <button id="saveMatrixBtn" class="action-btn">Save Matrix</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
