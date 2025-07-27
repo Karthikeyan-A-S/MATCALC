@@ -9,8 +9,14 @@
     --function-color: #6a89cc;
     --equals-color: #38ada9;
     --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    --delete-matrix :rgb(255, 99, 71);
+    --delete-matrix-hover:rgba(231, 68, 40, 0.945);
 }
-
+*{
+    box-sizing: border-box;
+    margin: 0px;
+    padding: 0%;
+}
 body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     background-color: var(--primary-bg);
@@ -111,7 +117,6 @@ header h1 {
     min-width: 40px;
 }
 
-/* Keypad */
 .keypad {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -146,19 +151,40 @@ header h1 {
     gap: 10px;
     margin-top: 1rem;
 }
-
+.stored-matrix-item  {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 .stored-matrix-item {
+    height: 40px;
     background-color: var(--accent-color);
+    border-radius: 10px;
     color: white;
-    padding: 8px 12px;
-    border-radius: 20px;
-    cursor: pointer;
+    overflow: hidden;
     font-weight: bold;
     transition: background-color 0.2s;
 }
-.stored-matrix-item:hover { background-color: var(--accent-hover); }
-
-/* Action Buttons */
+.stored-matrix-name{
+    flex: 1;
+    height: 100%;
+    cursor: pointer;
+    padding: 0px 10px;
+    font-size: 25px;
+}
+.delete-matrix-btn{
+    flex: 1;
+    cursor:pointer;
+    height: 100%;
+    background-color: var(--delete-matrix);
+    border: none;
+    outline: none;
+    padding: 0px 10px;
+    font-size: 25px;
+    font-weight: 700;
+}
+.stored-matrix-name:hover { background-color: var(--accent-hover); }
+.delete-matrix-btn:hover { background-color: var(--delete-matrix-hover);}
 .action-btn {
     display: block;
     width: 100%;
@@ -174,7 +200,6 @@ header h1 {
 }
 .action-btn:hover { background-color: var(--accent-hover); }
 
-/* Info Box */
 .info-box {
     margin-top: 1.5rem;
     padding: 1rem;
@@ -184,7 +209,6 @@ header h1 {
     text-align: center;
 }
 
-/* Modal Styles */
 .modal {
     display: none; position: fixed; z-index: 1000;
     left: 0; top: 0; width: 100%; height: 100%;
@@ -229,9 +253,9 @@ header h1 {
 
     body { padding: 0.5rem;
     margin:0px }
-    /* header h1 { font-size: 1.5rem; } */
     .card { padding: 1rem; }
     .keypad { gap: 5px; }
     .keypad-btn { font-size: 1rem; padding: 0.8rem; }
     .expression-display { font-size: 1.2rem; }
 }
+

@@ -31,7 +31,6 @@ document.addEventListener('DOMContentLoaded', () => {
         identity: (n) => { /* ... see full implementation below ... */ },
         zeros: (r, c) => Array(r).fill(0).map(() => Array(c).fill(0)),
         dot: (A, B) => { /* ... see full implementation below ... */ },
-        kronecker: (A, B) => { /* ... see full implementation below ... */ }
     };
     
     // Full implementations of complex functions
@@ -144,23 +143,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const res = vA.reduce((sum, val, i) => sum + val * vB[i], 0);
         return [[res]];
     };
-    matrixMath.kronecker = (A, B) => {
-        const [rowsA, colsA] = [A.length, A[0].length];
-        const [rowsB, colsB] = [B.length, B[0].length];
-        const res = matrixMath.zeros(rowsA * rowsB, colsA * colsB);
-        for (let i = 0; i < rowsA; i++) {
-            for (let j = 0; j < colsA; j++) {
-                for (let k = 0; k < rowsB; k++) {
-                    for (let l = 0; l < colsB; l++) {
-                        res[i * rowsB + k][j * colsB + l] = A[i][j] * B[k][l];
-                    }
-                }
-            }
-        }
-        return res;
-    };
-
-
     const expressionEvaluator = {
         toPostfix: (infix, tempScalarNames, functionArgCounts) => {
             const precedence = { '+': 1, '-': 1, '*': 2, '/': 2, '.*': 2, './': 2, '.^': 3, '^': 3 };
@@ -239,7 +221,6 @@ document.addEventListener('DOMContentLoaded', () => {
                         if (func === 'power') stack.push(matrixMath.power(A, s));
                         else if (func === 'zeros') stack.push(matrixMath.zeros(A[0][0], s));
                         else if (func === 'dot') stack.push(matrixMath.dot(A, B));
-                        else if (func === 'kron') stack.push(matrixMath.kronecker(A, B));
                     }
                 } else { // Binary operator
                     const B = stack.pop();
@@ -347,9 +328,28 @@ document.addEventListener('DOMContentLoaded', () => {
             if (name.startsWith('__')) return;
             const item = document.createElement('div');
             item.className = 'stored-matrix-item';
-            item.textContent = name;
-            item.addEventListener('click', () => expressionDisplay.textContent += name );
+            const Name = document.createElement('div');
+            Name.className = 'stored-matrix-name';
+            Name.textContent = name;
+            Name.addEventListener('click', () => expressionDisplay.textContent += name );
+
+             const deleteBtn = document.createElement('button');
+            deleteBtn.className = 'delete-matrix-btn';
+            deleteBtn.textContent = '×';
+            deleteBtn.dataset.name = name;
+            deleteBtn.addEventListener('click', (e) => {
+                e.stopPropagation(); // Prevent container click event
+                const nameToDelete = e.target.dataset.name;
+                if (confirm(`Are you sure you want to delete matrix "${nameToDelete}"?`)) {
+                    delete storedMatrices[nameToDelete];
+                    updateStoredMatricesList(); // Refresh the list
+                }
+            });
+            item.appendChild(Name);
+            item.appendChild(deleteBtn);
             storedMatricesList.appendChild(item);
+
+
         });
     };
     const modal = document.getElementById('matrixEditorModal');
@@ -376,7 +376,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     document.getElementById('saveMatrixBtn').addEventListener('click', () => {
         const name = document.getElementById('matrixNameInput').value.trim();
-        const reserved = ['det','inv','transpose','adj','trace','power','ref','rref','rank','identity','zeros','dot','kron'];
+        const reserved = ['det','inv','transpose','adj','trace','power','ref','rref','rank','identity','zeros','dot'];
         if(!/^[a-zA-Z_][a-zA-Z0-9_]*$/.test(name) || reserved.includes(name)){
             alert("Invalid name. Must start with a letter and contain only letters, numbers, or _. Cannot be a reserved keyword.");
             return;
