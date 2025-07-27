@@ -101,6 +101,9 @@ header h1 {
 }
 
 .matrix-grid-result span {
+    font-size: 30px;
+    font-weight: 700;
+    border: 1px solid black;
     background-color: #f8f9fa;
     padding: 8px;
     text-align: center;

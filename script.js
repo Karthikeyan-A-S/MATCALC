@@ -162,9 +162,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return res;
     };
 
-    // ##########################################
-    // ##      EXPRESSION PARSER & EVALUATOR   ##
-    // ##########################################
+
     const expressionEvaluator = {
         toPostfix: (infix, tempScalarNames, functionArgCounts) => {
             const precedence = { '+': 1, '-': 1, '*': 2, '/': 2, '.*': 2, './': 2, '.^': 3, '^': 3 };
@@ -265,9 +263,6 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
 
-    // ##########################################
-    // ##       DOM & STATE MANAGEMENT         ##
-    // ##########################################
     let storedMatrices = {};
     let lastResult = null;
 
@@ -357,7 +352,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const item = document.createElement('div');
             item.className = 'stored-matrix-item';
             item.textContent = name;
-            item.addEventListener('click', () => { expressionDisplay.textContent += name; expressionDisplay.focus(); });
+            item.addEventListener('click', () => expressionDisplay.textContent += name );
             storedMatricesList.appendChild(item);
         });
     };
