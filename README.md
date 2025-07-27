@@ -1,4 +1,4 @@
-# Advanced Matrix Calculator
+# MATRIX CALCULATOR( MATCALC )
 
 A powerful, responsive, and intuitive matrix calculator built with vanilla HTML, CSS, and JavaScript. This project provides a comprehensive tool for performing a wide range of matrix operations, from basic arithmetic to advanced linear algebra functions. It features an expression-based input system, matrix storage, and a fully responsive design that works on both desktop and mobile devices.
 

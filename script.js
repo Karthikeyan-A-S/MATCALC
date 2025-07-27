@@ -1,8 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-    // ##########################################
-    // ##          MATRIX MATH LIBRARY         ##
-    // ##########################################
+
     const matrixMath = {
         _error: (msg) => { throw new Error(msg); },
         _isSquare: (M) => M.length === M[0].length,
@@ -338,8 +336,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // ... All other event handlers (modal, save, store, etc.) remain largely the same ...
-    // NOTE: The following code is abbreviated for brevity but should be included from the previous version.
     const storedMatricesList = document.getElementById('stored-matrices-list');
     const updateStoredMatricesList = () => {
         storedMatricesList.innerHTML = '';
@@ -409,6 +405,5 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Initial State
     updateStoredMatricesList();
 });
