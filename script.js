@@ -15,22 +15,22 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!matrixMath._isSameDims(A, B)) matrixMath._error("Matrices must have the same dimensions for subtraction.");
             return A.map((row, i) => row.map((val, j) => val - B[i][j]));
         },
-        multiply: (A, B) => { /* ... see full implementation below ... */ },
-        divide: (A, B) => { /* ... see full implementation below ... */ },
-        hadamard: (A, B, operation) => { /* ... see full implementation below ... */ },
+        multiply: (A, B) => {  },
+        divide: (A, B) => {  },
+        hadamard: (A, B, operation) => {  },
         transpose: (M) => M[0].map((_, colIndex) => M.map(row => row[colIndex])),
-        determinant: (M) => { /* ... see full implementation below ... */ },
+        determinant: (M) => {  },
         cofactor: (M, r, c) => Math.pow(-1, r + c) * matrixMath.determinant(matrixMath.minor(M, r, c)),
         minor: (M, r, c) => M.filter((_, ri) => ri !== r).map(row => row.filter((_, ci) => ci !== c)),
-        adjoint: (M) => { /* ... see full implementation below ... */ },
-        inverse: (M) => { /* ... see full implementation below ... */ },
-        trace: (M) => { /* ... see full implementation below ... */ },
-        power: (M, n) => { /* ... see full implementation below ... */ },
-        rowEchelonForm: (M, reduced = false) => { /* ... see full implementation below ... */ },
-        rank: (M) => { /* ... see full implementation below ... */ },
-        identity: (n) => { /* ... see full implementation below ... */ },
+        adjoint: (M) => {  },
+        inverse: (M) => {  },
+        trace: (M) => {  },
+        power: (M, n) => {  },
+        rowEchelonForm: (M, reduced = false) => {  },
+        rank: (M) => {  },
+        identity: (n) => {  },
         zeros: (r, c) => Array(r).fill(0).map(() => Array(c).fill(0)),
-        dot: (A, B) => { /* ... see full implementation below ... */ },
+        dot: (A, B) => {  },
     };
     
     // Full implementations of complex functions
@@ -242,15 +242,22 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
 
-    let storedMatrices = {};
+    const saveMatricesToStorage = () => {
+        localStorage.setItem('storedMatrices', JSON.stringify(storedMatrices));
+    };
+
+    let storedMatrices = JSON.parse(localStorage.getItem('storedMatrices') || '{}');
     let lastResult = null;
+
+    // ... all matrixMath definitions remain unchanged
+    // ... all expressionEvaluator code remains unchanged
 
     const expressionDisplay = document.getElementById('expression-display');
     const resultDisplay = document.getElementById('result-display');
     const keypad = document.querySelector('.keypad');
     const newMatrixBtn = document.getElementById('newMatrixBtn');
     const storeResultBtn = document.getElementById('storeResultBtn');
-    
+
     const handleEvaluation = () => {
         const expression = expressionDisplay.textContent.replace(/Aⁿ/g, 'power').replace(/Aᵀ/g, 'transpose');
         const tempScalarNames = [];
@@ -265,8 +272,7 @@ document.addEventListener('DOMContentLoaded', () => {
             tempScalarNames.forEach(name => delete storedMatrices[name]);
         }
     };
-    
-    // Simplified displayResult, updateStoredMatricesList, and other DOM handlers...
+
     const displayResult = (matrix) => {
         resultDisplay.innerHTML = '';
         if (typeof matrix === 'string') {
@@ -296,7 +302,7 @@ document.addEventListener('DOMContentLoaded', () => {
              lastResult = null;
         }
     };
-    
+
     keypad.addEventListener('click', (e) => {
         const key = e.target.dataset.key;
         if (!key) return;
@@ -309,7 +315,7 @@ document.addEventListener('DOMContentLoaded', () => {
             expressionDisplay.textContent += key;
         }
     });
-    
+
     expressionDisplay.addEventListener('keydown', (e) => {
         if (e.key === 'Enter') {
             e.preventDefault();
@@ -333,32 +339,32 @@ document.addEventListener('DOMContentLoaded', () => {
             Name.textContent = name;
             Name.addEventListener('click', () => expressionDisplay.textContent += name );
 
-             const deleteBtn = document.createElement('button');
+            const deleteBtn = document.createElement('button');
             deleteBtn.className = 'delete-matrix-btn';
             deleteBtn.textContent = '×';
             deleteBtn.dataset.name = name;
             deleteBtn.addEventListener('click', (e) => {
-                e.stopPropagation(); // Prevent container click event
+                e.stopPropagation();
                 const nameToDelete = e.target.dataset.name;
                 if (confirm(`Are you sure you want to delete matrix "${nameToDelete}"?`)) {
                     delete storedMatrices[nameToDelete];
-                    updateStoredMatricesList(); // Refresh the list
+                    saveMatricesToStorage();
+                    updateStoredMatricesList();
                 }
             });
             item.appendChild(Name);
             item.appendChild(deleteBtn);
             storedMatricesList.appendChild(item);
-
-
         });
     };
+
     const modal = document.getElementById('matrixEditorModal');
     const openModal = () => { modal.style.display = 'flex'; };
-    const closeModal = () => { modal.style.display = 'none'; /*...*/ };
+    const closeModal = () => { modal.style.display = 'none'; };
     newMatrixBtn.addEventListener('click', openModal);
     document.querySelector('.close-btn').addEventListener('click', closeModal);
     window.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
-    // ... logic for createGridBtn, saveMatrixBtn, storeResultBtn ...
+
     document.getElementById('createGridBtn').addEventListener('click', () => {
         const rows = parseInt(document.getElementById('matrixRowsInput').value);
         const cols = parseInt(document.getElementById('matrixColsInput').value);
@@ -374,6 +380,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
     });
+
     document.getElementById('saveMatrixBtn').addEventListener('click', () => {
         const name = document.getElementById('matrixNameInput').value.trim();
         const reserved = ['det','inv','transpose','adj','trace','power','ref','rref','rank','identity','zeros','dot'];
@@ -393,14 +400,17 @@ document.addEventListener('DOMContentLoaded', () => {
             matrix.push(row);
         }
         storedMatrices[name] = matrix;
+        saveMatricesToStorage();
         updateStoredMatricesList();
         closeModal();
     });
+
     storeResultBtn.addEventListener('click', () => {
         if(!lastResult) return alert("No valid result to store.");
         const name = prompt("Enter a name for the result matrix:");
         if(name && name.trim()){
             storedMatrices[name.trim()] = lastResult;
+            saveMatricesToStorage();
             updateStoredMatricesList();
         }
     });
